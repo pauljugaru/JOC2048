@@ -1,0 +1,29 @@
+@startuml
+[*] --> Initialize : Start Game
+
+state Initialize {
+    [*] --> CreateBoard
+    CreateBoard --> AddInitialTiles : Board Created
+    AddInitialTiles --> [*] : Initial Tiles Added
+}
+
+Initialize --> GameInProgress : Game Started
+
+state GameInProgress {
+    [*] --> WaitingForMove
+    WaitingForMove --> ProcessingMove : Key Pressed
+    ProcessingMove --> MovingTiles : Valid Move
+    MovingTiles --> MergingTiles : Tiles Moved
+    MergingTiles --> AddingNewTile : Tiles Merged
+    AddingNewTile --> CheckingGameOver : New Tile Added
+    CheckingGameOver --> WaitingForMove : Game Continues
+
+    ProcessingMove --> WaitingForMove : Invalid Move
+    CheckingGameOver --> [*] : No More Moves
+}
+
+GameInProgress --> GameOver : Game Over
+GameOver --> Initialize : Press R (Reset)
+GameOver --> [*] : Exit Game
+
+@enduml

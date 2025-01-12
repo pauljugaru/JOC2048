@@ -1,0 +1,46 @@
+@startuml
+actor User
+participant GameGUI
+participant Game2048
+participant Board
+participant Tile
+
+User -> GameGUI : Press Arrow Key
+activate GameGUI
+
+GameGUI -> Game2048 : move(Direction)
+activate Game2048
+
+Game2048 -> Board : move(Direction)
+activate Board
+
+Board -> Board : Move tiles
+Board -> Tile : canMerge(other)
+activate Tile
+Tile --> Board : true/false
+deactivate Tile
+
+alt can merge
+    Board -> Tile : merge(other)
+    activate Tile
+    Tile --> Board : merged tile
+    deactivate Tile
+    Board -> Board : update score
+end
+
+Board -> Board : addNewTile()
+Board --> Game2048 : moved status
+deactivate Board
+
+Game2048 --> GameGUI : moved status
+deactivate Game2048
+
+GameGUI -> GameGUI : updateBoard()
+GameGUI --> User : Updated Display
+deactivate GameGUI
+
+alt game over
+    GameGUI -> GameGUI : showGameOver()
+end
+
+@enduml

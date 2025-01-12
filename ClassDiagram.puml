@@ -1,0 +1,71 @@
+@startuml
+package interfaces {
+    interface IGame {
+        + initialize()
+        + move(Direction)
+        + isGameOver()
+        + getScore()
+        + addNewTile()
+    }
+
+    interface IBoard {
+        + initialize()
+        + move(Direction)
+        + addNewTile()
+        + isGameOver()
+        + getScore()
+        + getBoard()
+        + setBoard(AbstractTile[][])
+    }
+}
+
+package model {
+    abstract class AbstractTile {
+        # value: int
+        # x: int
+        # y: int
+        + getValue()
+        + getX()
+        + getY()
+        + setPosition(x,y)
+        + {abstract} canMerge(AbstractTile)
+        + {abstract} merge(AbstractTile)
+    }
+
+    class Tile extends AbstractTile {
+        + canMerge(AbstractTile)
+        + merge(AbstractTile)
+    }
+
+    class SpecialTile extends AbstractTile {
+        + canMerge(AbstractTile)
+        + merge(AbstractTile)
+    }
+
+    class Game2048 implements IGame {
+        - board: IBoard
+    }
+
+    class Board implements IBoard {
+        - board: AbstractTile[][]
+        - score: int
+        - specialTileSpawned: boolean
+    }
+}
+
+package org.example {
+    class GameGUI {
+        - TILE_SIZE: int
+        - GAP: int
+        - game: Game2048
+        - gameBoard: GridPane
+        - scoreLabel: Label
+    }
+}
+
+Game2048 --> IBoard
+Board --> AbstractTile
+GameGUI --> Game2048
+
+@enduml
+
